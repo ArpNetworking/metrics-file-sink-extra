@@ -221,7 +221,9 @@ import javax.annotation.Nullable;
                         "Unable to construct %s, metrics disabled; failures=%s",
                         this.getClass().getEnclosingClass().getSimpleName(),
                         failures));
-                return new WarningSink(failures);
+                return new WarningSink.Builder()
+                        .setReasons(failures)
+                        .build();
             }
 
             return createSink();
