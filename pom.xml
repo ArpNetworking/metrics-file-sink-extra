@@ -60,9 +60,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:arpnetworking/metrics-file-sink-java.git</connection>
-    <developerConnection>scm:git:git@github.com:arpnetworking/metrics-file-sink-java.git</developerConnection>
-    <url>https://github.com/arpnetworking/metrics-file-sink-java</url>
+    <connection>scm:git:git@github.com:arpnetworking/metrics-file-sink-extra.git</connection>
+    <developerConnection>scm:git:git@github.com:arpnetworking/metrics-file-sink-extra.git</developerConnection>
+    <url>https://github.com/arpnetworking/metrics-file-sink-extra</url>
     <tag>HEAD</tag>
   </scm>
 
