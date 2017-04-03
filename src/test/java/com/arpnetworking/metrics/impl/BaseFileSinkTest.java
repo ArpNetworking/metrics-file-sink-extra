@@ -216,17 +216,11 @@ public class BaseFileSinkTest {
 
         public static class Builder extends BaseFileSink.Builder<TestFileSink, Builder> {
 
-            /**
-             * {@inheritDoc}
-             */
             @Override
             protected TestFileSink createSink() {
                 return new TestFileSink(this);
             }
 
-            /**
-             * {@inheritDoc}
-             */
             @Override
             protected Builder self() {
                 return this;

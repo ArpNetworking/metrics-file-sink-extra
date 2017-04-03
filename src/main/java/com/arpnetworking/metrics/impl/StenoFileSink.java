@@ -51,9 +51,6 @@ import javax.annotation.Nullable;
 @SuppressWarnings("deprecation")
 public class StenoFileSink extends BaseFileSink {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void record(final Event event) {
 
@@ -229,17 +226,11 @@ public class StenoFileSink extends BaseFileSink {
      */
     public static class Builder extends BaseFileSink.Builder<StenoFileSink, Builder> {
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         protected StenoFileSink createSink() {
             return new StenoFileSink(this);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         protected Builder self() {
             return this;
