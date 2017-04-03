@@ -29,7 +29,7 @@
   <name>File Sink Extra</name>
   <description>File sink for metrics client.</description>
   <url>https://github.com/ArpNetworking/metrics-file-sink-extra</url>
-  <version>0.7.0-SNAPSHOT</version>
+  <version>0.7.0</version>
 
   <licenses>
     <license>
@@ -63,7 +63,7 @@
     <connection>scm:git:git@github.com:arpnetworking/metrics-file-sink-extra.git</connection>
     <developerConnection>scm:git:git@github.com:arpnetworking/metrics-file-sink-extra.git</developerConnection>
     <url>https://github.com/arpnetworking/metrics-file-sink-extra</url>
-    <tag>HEAD</tag>
+    <tag>file-sink-extra-0.7.0</tag>
   </scm>
 
   <properties>
