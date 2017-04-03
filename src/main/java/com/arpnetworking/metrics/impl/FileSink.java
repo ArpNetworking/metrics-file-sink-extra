@@ -44,9 +44,6 @@ import javax.annotation.Nullable;
  */
 public class FileSink extends BaseFileSink {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void record(final Event event) {
         try {
@@ -199,17 +196,11 @@ public class FileSink extends BaseFileSink {
      */
     public static class Builder extends BaseFileSink.Builder<FileSink, Builder> {
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         protected FileSink createSink() {
             return new FileSink(this);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         protected Builder self() {
             return this;

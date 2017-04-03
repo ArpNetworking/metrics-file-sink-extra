@@ -29,7 +29,7 @@
   <name>File Sink Extra</name>
   <description>File sink for metrics client.</description>
   <url>https://github.com/ArpNetworking/metrics-file-sink-extra</url>
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.7.0-SNAPSHOT</version>
 
   <licenses>
     <license>
@@ -41,9 +41,9 @@
   <developers>
     <developer>
       <id>brandonarp</id>
-      <email>brandonarp@gmail.com</email>
-      <organization>Arp Networking</organization>
-      <organizationUrl>http://www.arpnetworking.com</organizationUrl>
+      <email>brandon.arp@inscopemetrics.com</email>
+      <organization>Inscope Metrics</organization>
+      <organizationUrl>http://www.inscopemetrics.com</organizationUrl>
       <roles>
         <role>developer</role>
       </roles>
@@ -95,7 +95,7 @@
     <junit.version>4.12</junit.version>
     <logback.steno.version>1.16.1</logback.steno.version>
     <logback.version>1.1.7</logback.version>
-    <metrics.client.version>0.6.0</metrics.client.version>
+    <metrics.client.version>0.7.0</metrics.client.version>
     <mockito.version>1.10.19</mockito.version>
     <slf4j.version>1.7.21</slf4j.version>
 
