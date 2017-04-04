@@ -68,7 +68,7 @@ import javax.annotation.Nullable;
         final SizeAndRandomizedTimeBasedFNATP<ILoggingEvent> triggeringPolicy = new SizeAndRandomizedTimeBasedFNATP<>();
         triggeringPolicy.setContext(_loggerContext);
         triggeringPolicy.setMaxOffsetInMillis(MAX_RANDOM_OFFSET_IN_MILLIS);
-        triggeringPolicy.setMaxFileSize(maxFileSizeAsString);
+        triggeringPolicy.setMaxFileSize(maxFileSize);
 
         final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = new TimeBasedRollingPolicy<>();
         rollingPolicy.setTimeBasedFileNamingAndTriggeringPolicy(triggeringPolicy);

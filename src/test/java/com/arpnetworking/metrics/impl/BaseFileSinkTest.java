@@ -59,13 +59,11 @@ public class BaseFileSinkTest {
                 (SizeAndRandomizedTimeBasedFNATP<ILoggingEvent>) rollingPolicy.getTimeBasedFileNamingAndTriggeringPolicy();
 
         Assert.assertEquals(10 * 60 * 1000, triggerPolicy.getMaxOffsetInMillis());
-        Assert.assertEquals("100MB", triggerPolicy.getMaxFileSize());
         Assert.assertEquals(500, asyncAppender.getQueueSize());
         Assert.assertEquals(0, asyncAppender.getDiscardingThreshold());
         Assert.assertFalse(rollingAppender.isPrudent());
         Assert.assertEquals(24, rollingPolicy.getMaxHistory());
         Assert.assertTrue(rollingPolicy.getFileNamePattern().endsWith(".gz"));
-        Assert.assertTrue(encoder.isImmediateFlush());
         Assert.assertEquals(expectedPath + "query.log", rollingAppender.getFile());
         Assert.assertEquals(expectedPath + "query.%d{yyyy-MM-dd-HH}.%i.log.gz", rollingPolicy.getFileNamePattern());
     }
@@ -97,11 +95,9 @@ public class BaseFileSinkTest {
                 (SizeAndRandomizedTimeBasedFNATP<ILoggingEvent>) rollingPolicy.getTimeBasedFileNamingAndTriggeringPolicy();
 
         Assert.assertEquals(10 * 60 * 1000, triggerPolicy.getMaxOffsetInMillis());
-        Assert.assertEquals("2GB", triggerPolicy.getMaxFileSize());
         Assert.assertEquals(1000, asyncAppender.getQueueSize());
         Assert.assertEquals(1000, asyncAppender.getDiscardingThreshold());
         Assert.assertEquals(48, rollingPolicy.getMaxHistory());
-        Assert.assertFalse(encoder.isImmediateFlush());
         Assert.assertEquals(expectedPath + "foo.bar", rollingAppender.getFile());
         Assert.assertEquals(expectedPath + "foo.%d{yyyy-MM-dd-HH}.%i.bar", rollingPolicy.getFileNamePattern());
     }
@@ -133,12 +129,10 @@ public class BaseFileSinkTest {
                 (SizeAndRandomizedTimeBasedFNATP<ILoggingEvent>) rollingPolicy.getTimeBasedFileNamingAndTriggeringPolicy();
 
         Assert.assertEquals(10 * 60 * 1000, triggerPolicy.getMaxOffsetInMillis());
-        Assert.assertEquals("100MB", triggerPolicy.getMaxFileSize());
         Assert.assertEquals(500, asyncAppender.getQueueSize());
         Assert.assertEquals(0, asyncAppender.getDiscardingThreshold());
         Assert.assertFalse(rollingAppender.isPrudent());
         Assert.assertEquals(24, rollingPolicy.getMaxHistory());
-        Assert.assertTrue(encoder.isImmediateFlush());
         Assert.assertEquals(expectedPath + "query.log", rollingAppender.getFile());
         Assert.assertEquals(expectedPath + "query.%d{yyyy-MM-dd-HH}.%i.log.gz", rollingPolicy.getFileNamePattern());
 
