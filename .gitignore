@@ -3,6 +3,7 @@ target/
 logs/
 pom.xml.versionsBackup
 dependency-reduced-pom.xml
+query.log
 
 # Eclipse
 .metadata/

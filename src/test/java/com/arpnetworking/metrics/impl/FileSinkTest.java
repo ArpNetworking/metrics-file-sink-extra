@@ -29,7 +29,6 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.github.fge.jsonschema.main.JsonValidator;
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -73,8 +72,8 @@ public class FileSinkTest {
                 .writeValueAsString(Mockito.any());
         recordEmpty(sink);
         Mockito.verify(logger).warn(
-                Mockito.argThat(Matchers.any(String.class)),
-                Mockito.argThat(Matchers.any(Throwable.class)));
+                Mockito.any(String.class),
+                Mockito.any(Throwable.class));
     }
 
     @Test
@@ -85,6 +84,7 @@ public class FileSinkTest {
                 .setDirectory(createDirectory("./target/FileSinkTest"))
                 .setName("testEmptySerialization-Query")
                 .setImmediateFlush(Boolean.TRUE)
+                .setAsync(false)
                 .build();
 
         sink.record(new TsdEvent(
@@ -119,6 +119,7 @@ public class FileSinkTest {
                 .setDirectory(createDirectory("./target/FileSinkTest"))
                 .setName("testSerialization-Query")
                 .setImmediateFlush(Boolean.TRUE)
+                .setAsync(false)
                 .build();
 
         final Map<String, String> annotations = new LinkedHashMap<>(ANNOTATIONS);
