@@ -88,7 +88,8 @@ import javax.annotation.Nullable;
     private FileAppender<ILoggingEvent> createRollingAppender(
             final String fileName,
             final RollingPolicy rollingPolicy,
-            final Encoder<ILoggingEvent> encoder) {
+            final Encoder<ILoggingEvent> encoder,
+            final boolean immediateFlush) {
         final RollingFileAppender<ILoggingEvent> rollingAppender = new RollingFileAppender<>();
         rollingAppender.setContext(_loggerContext);
         rollingAppender.setName("query-log");
@@ -96,6 +97,7 @@ import javax.annotation.Nullable;
         rollingAppender.setAppend(true);
         rollingAppender.setRollingPolicy(rollingPolicy);
         rollingAppender.setEncoder(encoder);
+        rollingAppender.setImmediateFlush(immediateFlush);
         return rollingAppender;
     }
 
@@ -120,49 +122,47 @@ import javax.annotation.Nullable;
     protected BaseFileSink(
             final Builder<? extends BaseFileSink, ? extends Builder<? extends Sink, ?>> builder,
             final Encoder<ILoggingEvent> encoder) {
-        final String directory = builder._directory.getPath();
-        final String name = builder._name;
-        final String extension = builder._extension;
-        final int maxHistory = builder._maxHistory;
-        final String maxFileSize = builder._maxFileSize;
-        final boolean compress = builder._compress;
-        final boolean dropWhenQueueFull = builder._dropWhenQueueFull;
-        final int maxQueueSize = builder._maxQueueSize;
-
-        final StringBuilder fileNameBuilder = new StringBuilder(directory);
+        final StringBuilder fileNameBuilder = new StringBuilder(builder._directory.getPath());
         fileNameBuilder.append(File.separator);
-        fileNameBuilder.append(name);
+        fileNameBuilder.append(builder._name);
         final String fileNameWithoutExtension = fileNameBuilder.toString();
-        fileNameBuilder.append(extension);
+        fileNameBuilder.append(builder._extension);
         final String fileName = fileNameBuilder.toString();
 
         _loggerContext = new LoggerContext();
         encoder.setContext(_loggerContext);
 
         final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = createRollingPolicy(
-                extension,
+                builder._extension,
                 fileNameWithoutExtension,
-                maxHistory,
-                maxFileSize,
-                compress);
+                builder._maxHistory,
+                builder._maxFileSize,
+                builder._compress);
         final FileAppender<ILoggingEvent> rollingAppender = createRollingAppender(
                 fileName,
                 rollingPolicy,
-                encoder);
-        final Appender<ILoggingEvent> asyncAppender = createAsyncAppender(
-                rollingAppender,
-                dropWhenQueueFull ? maxQueueSize : 0,
-                maxQueueSize);
+                encoder,
+                builder._immediateFlush);
 
         rollingPolicy.setParent(rollingAppender);
         rollingPolicy.start();
         encoder.start();
         rollingAppender.start();
-        asyncAppender.start();
+
+        final Appender<ILoggingEvent> appender;
+        if (builder._async) {
+            appender = createAsyncAppender(
+                    rollingAppender,
+                    builder._dropWhenQueueFull ? builder._maxQueueSize : 0,
+                    builder._maxQueueSize);
+            appender.start();
+        } else {
+            appender = rollingAppender;
+        }
 
         final Logger rootLogger = _loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
         rootLogger.setLevel(Level.INFO);
-        rootLogger.addAppender(asyncAppender);
+        rootLogger.addAppender(appender);
 
         Runtime.getRuntime().addShutdownHook(new ShutdownHookThread(_loggerContext));
 
@@ -299,13 +299,25 @@ import javax.annotation.Nullable;
 
         /**
          * Set whether entries are flushed immediately. Entries are still
-         * written asynchronously. Optional; default is true.
+         * written asynchronously unless async is disabled. Optional; default
+         * is true.
          *
          * @param value Whether to flush immediately.
          * @return This <code>Builder</code> instance.
          */
         public B setImmediateFlush(@Nullable final Boolean value) {
             _immediateFlush = value;
+            return self();
+        }
+
+        /**
+         * Set whether files are written asynchronously. Optional; default is true.
+         *
+         * @param value Whether to write asynchronously.
+         * @return This <code>Builder</code> instance.
+         */
+        public B setAsync(@Nullable final Boolean value) {
+            _async = value;
             return self();
         }
 
@@ -367,6 +379,10 @@ import javax.annotation.Nullable;
                 _immediateFlush = DEFAULT_IMMEDIATE_FLUSH;
                 LOGGER.info(String.format("Defaulted null immediate flush; immediateFlush=%b", _immediateFlush));
             }
+            if (_async == null) {
+                _async = DEFAULT_ASYNC;
+                LOGGER.info(String.format("Defaulted null async; async=%b", _async));
+            }
             if (_dropWhenQueueFull == null) {
                 _dropWhenQueueFull = DEFAULT_DROP_WHEN_QUEUE_FULL;
                 LOGGER.info(String.format("Defaulted null drop when queue full; dropWhenQueueFull=%s", _dropWhenQueueFull));
@@ -414,6 +430,7 @@ import javax.annotation.Nullable;
         protected String _maxFileSize = DEFAULT_MAX_FILE_SIZE;
         protected Boolean _compress = DEFAULT_COMPRESS;
         protected Boolean _immediateFlush = DEFAULT_IMMEDIATE_FLUSH;
+        protected Boolean _async = DEFAULT_ASYNC;
         protected Boolean _dropWhenQueueFull = DEFAULT_DROP_WHEN_QUEUE_FULL;
         protected Integer _maxQueueSize = DEFAULT_MAX_QUEUE_SIZE;
 
@@ -423,7 +440,8 @@ import javax.annotation.Nullable;
         private static final Integer DEFAULT_MAX_HISTORY = 24;
         private static final String DEFAULT_MAX_FILE_SIZE = "100MB";
         private static final Boolean DEFAULT_COMPRESS = Boolean.TRUE;
-        private static final Boolean DEFAULT_IMMEDIATE_FLUSH = Boolean.TRUE;
+        private static final Boolean DEFAULT_IMMEDIATE_FLUSH = Boolean.FALSE;
+        private static final Boolean DEFAULT_ASYNC = Boolean.TRUE;
         private static final Boolean DEFAULT_DROP_WHEN_QUEUE_FULL = Boolean.FALSE;
         private static final Integer DEFAULT_MAX_QUEUE_SIZE = 500;
     }

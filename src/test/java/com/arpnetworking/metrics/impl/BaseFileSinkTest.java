@@ -103,6 +103,28 @@ public class BaseFileSinkTest {
     }
 
     @Test
+    public void testSyncCustomBuilder() throws IOException {
+        final String expectedPath = "./target/BaseFileSinkTest/testBuilderWithoutImmediateFlush/";
+        final TestFileSink sink = (TestFileSink) new TestFileSink.Builder()
+                .setDirectory(createDirectory(expectedPath))
+                .setAsync(Boolean.FALSE)
+                .build();
+
+        final AsyncAppender asyncAppender = (AsyncAppender)
+                sink.getMetricsLogger().getAppender("query-log-async");
+        Assert.assertNull(asyncAppender);
+
+        final RollingFileAppender<ILoggingEvent> rollingAppender = (RollingFileAppender<ILoggingEvent>)
+                sink.getMetricsLogger().getAppender("query-log");
+        @SuppressWarnings("unchecked")
+        final TimeBasedRollingPolicy<ILoggingEvent> rollingPolicy = (TimeBasedRollingPolicy<ILoggingEvent>)
+                rollingAppender.getRollingPolicy();
+        final PatternLayoutEncoder encoder = (PatternLayoutEncoder) rollingAppender.getEncoder();
+        final SizeAndRandomizedTimeBasedFNATP<ILoggingEvent> triggerPolicy =
+                (SizeAndRandomizedTimeBasedFNATP<ILoggingEvent>) rollingPolicy.getTimeBasedFileNamingAndTriggeringPolicy();
+    }
+
+    @Test
     public void testBuilderWithNull() throws IOException {
         final String expectedPath = "./";
         final TestFileSink sink = (TestFileSink) new TestFileSink.Builder()
@@ -110,6 +132,7 @@ public class BaseFileSinkTest {
                 .setDirectory(null)
                 .setExtension(null)
                 .setImmediateFlush(null)
+                .setAsync(null)
                 .setMaxHistory(null)
                 .setMaxFileSize(null)
                 .setName(null)

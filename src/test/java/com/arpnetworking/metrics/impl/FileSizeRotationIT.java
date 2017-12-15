@@ -53,6 +53,7 @@ public class FileSizeRotationIT {
                                         .setMaxHistory(4)
                                         .setCompress(false)
                                         .setImmediateFlush(true)
+                                        .setAsync(false)
                                         .build()))
                 .build();
         // This should create base file
