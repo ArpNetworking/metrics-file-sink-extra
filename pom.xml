@@ -18,7 +18,7 @@
   <parent>
     <groupId>com.arpnetworking.build</groupId>
     <artifactId>arpnetworking-parent-pom</artifactId>
-    <version>1.0.31</version>
+    <version>1.1.10</version>
     <relativePath />
   </parent>
 
@@ -86,16 +86,16 @@
     -->
 
     <!--Dependency versions-->
-    <jackson.version>2.9.2</jackson.version>
-    <json-jackson-coreutils.version>1.8</json-jackson-coreutils.version>
-    <json-schema-core.version>1.2.5</json-schema-core.version>
-    <json-schema-validator.version>2.2.6</json-schema-validator.version>
-    <jsr305.version>3.0.1</jsr305.version>
+    <jackson.version>2.9.8</jackson.version>
+    <json-jackson-coreutils.version>1.9</json-jackson-coreutils.version>
+    <json-schema-core.version>1.2.10</json-schema-core.version>
+    <json-schema-validator.version>2.2.10</json-schema-validator.version>
+    <jsr305.version>3.0.2</jsr305.version>
     <junit.version>4.12</junit.version>
-    <logback.steno.version>1.18.0</logback.steno.version>
+    <logback.steno.version>1.18.2</logback.steno.version>
     <logback.version>1.2.3</logback.version>
-    <metrics.client.version>0.10.0</metrics.client.version>
-    <mockito.version>2.12.0</mockito.version>
+    <metrics.client.version>0.10.1</metrics.client.version>
+    <mockito.version>2.23.4</mockito.version>
     <slf4j.version>1.7.25</slf4j.version>
 
     <!--Plugin versions-->
@@ -289,6 +289,15 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
+      <exclusions>
+        <!-- TODO(ville): Remove this exclusion once the annotations package is consistently depended upon:
+            https://github.com/FasterXML/jackson-bom/issues/15
+        -->
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -309,22 +318,56 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.fge</groupId>
+      <groupId>com.github.java-json-tools</groupId>
       <artifactId>json-schema-validator</artifactId>
       <version>${json-schema-validator.version}</version>
       <scope>test</scope>
+      <!-- TODO(ville): Pending external upgrade:
+          https://github.com/java-json-tools/json-schema-validator/pull/284
+       -->
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>jsr305</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
-      <groupId>com.github.fge</groupId>
+      <groupId>com.github.java-json-tools</groupId>
       <artifactId>json-schema-core</artifactId>
       <version>${json-schema-core.version}</version>
       <scope>test</scope>
+      <exclusions>
+        <!-- TODO(ville): Pending external upgrade:
+            https://github.com/java-json-tools/json-schema-core/pull/50
+        -->
+        <exclusion>
+          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>jsr305</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
-      <groupId>com.github.fge</groupId>
+      <groupId>com.github.java-json-tools</groupId>
       <artifactId>jackson-coreutils</artifactId>
       <version>${json-jackson-coreutils.version}</version>
       <scope>test</scope>
+      <exclusions>
+        <!-- TODO(ville): Via unmaintained transitive:
+            https://github.com/fge/msg-simple
+        -->
+        <exclusion>
+          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>jsr305</artifactId>
+        </exclusion>
+        <!-- TODO(ville): Pending external upgrade:
+            https://github.com/java-json-tools/jackson-coreutils/pull/4
+        -->
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>
