@@ -258,6 +258,13 @@
       <groupId>com.arpnetworking.metrics</groupId>
       <artifactId>metrics-client</artifactId>
       <version>${metrics.client.version}</version>
+      <exclusions>
+        <!-- TODO(ville): Remove suppression once findbugs to spotbugs migration is complete -->
+        <exclusion>
+          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>findbugs-annotations</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
