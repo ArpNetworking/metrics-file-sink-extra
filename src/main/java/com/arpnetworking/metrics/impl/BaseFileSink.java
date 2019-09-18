@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Groupon.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,19 +37,19 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 /**
- * Base class for <code>Sink</code> implementations which write to files. This
+ * Base class for {@link Sink} implementations which write to files. This
  * implementation uses Logback as the underlying implementation to write events
  * to disk. It is designed not to interfere with Logback or SLF4J usage for
  * application logging.
  *
- * @author Ville Koskela (ville dot koskela at inscopemetrics dot com)
+ * @author Ville Koskela (ville dot koskela at inscopemetrics dot io)
  */
 /* package private */ abstract class BaseFileSink implements Sink {
 
     /**
-     * Accessor for the <code>Logger</code> instance to write to.
+     * Accessor for the {@link Logger} instance to write to.
      *
-     * @return The <code>Logger</code> instance to write to.
+     * @return The {@link Logger} instance to write to.
      */
     protected Logger getMetricsLogger() {
         return _metricsLogger;
@@ -117,7 +117,7 @@ import javax.annotation.Nullable;
     /**
      * Protected constructor.
      *
-     * @param builder Instance of <code>Builder</code>.
+     * @param builder Instance of {@link Builder}.
      */
     protected BaseFileSink(
             final Builder<? extends BaseFileSink, ? extends Builder<? extends Sink, ?>> builder,
@@ -194,18 +194,18 @@ import javax.annotation.Nullable;
     }
 
     /**
-     * Builder for <code>BaseFileSink</code>.
+     * Builder for {@link BaseFileSink}.
      *
      * This class is thread safe.
      *
-     * @author Ville Koskela (ville dot koskela at inscopemetrics dot com)
+     * @author Ville Koskela (ville dot koskela at inscopemetrics dot io)
      */
     public abstract static class Builder<T extends Sink, B extends Builder<? extends Sink, ?>> {
 
         /**
-         * Create an instance of <code>Sink</code>.
+         * Create an instance of {@link Sink}.
          *
-         * @return Instance of <code>Sink</code>.
+         * @return Instance of {@link Sink}.
          */
         public Sink build() {
             // Defaults
@@ -234,7 +234,7 @@ import javax.annotation.Nullable;
          * of the application.
          *
          * @param value The value for directory.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setDirectory(@Nullable final File value) {
             _directory = value;
@@ -246,7 +246,7 @@ import javax.annotation.Nullable;
          * The file name without extension cannot be empty.
          *
          * @param value The value for name.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setName(@Nullable final String value) {
             _name = value;
@@ -257,7 +257,7 @@ import javax.annotation.Nullable;
          * Set the file extension. Optional; default is ".log".
          *
          * @param value The value for extension.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setExtension(@Nullable final String value) {
             _extension = value;
@@ -268,7 +268,7 @@ import javax.annotation.Nullable;
          * Set the max history to retain. Optional; default is 24.
          *
          * @param value The value for max history.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setMaxHistory(@Nullable final Integer value) {
             _maxHistory = value;
@@ -279,7 +279,7 @@ import javax.annotation.Nullable;
          * Set the max file size. Accepted units are: "KB", "MB" and "GB". Optional; default is "100MB".
          *
          * @param value The value for max file size in megabytes.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setMaxFileSize(@Nullable final String value) {
             _maxFileSize = value;
@@ -290,7 +290,7 @@ import javax.annotation.Nullable;
          * Set whether files are compressed on roll. Optional; default is true.
          *
          * @param value Whether to compress on roll.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setCompress(@Nullable final Boolean value) {
             _compress = value;
@@ -303,7 +303,7 @@ import javax.annotation.Nullable;
          * is true.
          *
          * @param value Whether to flush immediately.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setImmediateFlush(@Nullable final Boolean value) {
             _immediateFlush = value;
@@ -314,7 +314,7 @@ import javax.annotation.Nullable;
          * Set whether files are written asynchronously. Optional; default is true.
          *
          * @param value Whether to write asynchronously.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setAsync(@Nullable final Boolean value) {
             _async = value;
@@ -323,12 +323,12 @@ import javax.annotation.Nullable;
 
         /**
          * Set whether to drop events when the queue is full. If events are not
-         * dropped when the queue is full closing a <code>Metrics</code>
-         * instance will block on writing to this <code>Sink</code>. Optional;
+         * dropped when the queue is full closing a {@link com.arpnetworking.metrics.Metrics}
+         * instance will block on writing to this {@link Sink}. Optional;
          * default is false.
          *
          * @param value Whether to drop events when the queue is full.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setDropWhenQueueFull(@Nullable final Boolean value) {
             _dropWhenQueueFull = value;
@@ -339,7 +339,7 @@ import javax.annotation.Nullable;
          * Set maximum event queue size. Optional; default is 500.
          *
          * @param value The maximum event queue size.
-         * @return This <code>Builder</code> instance.
+         * @return This {@link Builder} instance.
          */
         public B setMaxQueueSize(@Nullable final Integer value) {
             _maxQueueSize = value;
@@ -409,10 +409,10 @@ import javax.annotation.Nullable;
         }
 
         /**
-         * Protected method delegates construction of the actual <code>Sink</code>
+         * Protected method delegates construction of the actual {@link Sink}
          * instance to the concrete builder child class.
          *
-         * @return Instance of <code>T</code>.
+         * @return Instance of {@link T}.
          */
         protected abstract T createSink();
 

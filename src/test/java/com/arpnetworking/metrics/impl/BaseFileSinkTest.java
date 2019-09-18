@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Groupon.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,9 +34,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 /**
- * Tests for <code>BaseFileSink</code>.
+ * Tests for {@link BaseFileSink}.
  *
- * @author Ville Koskela (ville dot koskela at inscopemetrics dot com)
+ * @author Ville Koskela (ville dot koskela at inscopemetrics dot io)
  */
 public class BaseFileSinkTest {
 

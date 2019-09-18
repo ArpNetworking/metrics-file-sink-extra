@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Groupon.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,8 @@
  */
 package com.arpnetworking.metrics.impl;
 
-import com.arpnetworking.metrics.ComplexCompoundUnit;
 import com.arpnetworking.metrics.Quantity;
 import com.arpnetworking.metrics.Sink;
-import com.arpnetworking.metrics.Units;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,7 +38,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -50,9 +47,9 @@ import java.util.Scanner;
 import java.util.UUID;
 
 /**
- * Tests for <code>TsdMetrics</code>.
+ * Tests for {@link TsdMetrics}.
  *
- * @author Ville Koskela (ville dot koskela at inscopemetrics dot com)
+ * @author Ville Koskela (ville dot koskela at inscopemetrics dot io)
  */
 public class FileSinkTest {
 
@@ -91,7 +88,8 @@ public class FileSinkTest {
                 ANNOTATIONS,
                 TEST_EMPTY_SERIALIZATION_TIMERS,
                 TEST_EMPTY_SERIALIZATION_COUNTERS,
-                TEST_EMPTY_SERIALIZATION_GAUGES));
+                TEST_EMPTY_SERIALIZATION_GAUGES,
+                Collections.emptyMap()));
 
         // TODO(vkoskela): Add protected option to disable async [MAI-181].
         Thread.sleep(100);
@@ -128,7 +126,8 @@ public class FileSinkTest {
                 annotations,
                 TEST_SERIALIZATION_TIMERS,
                 TEST_SERIALIZATION_COUNTERS,
-                TEST_SERIALIZATION_GAUGES));
+                TEST_SERIALIZATION_GAUGES,
+                Collections.emptyMap()));
 
         // TODO(vkoskela): Add protected option to disable async [MAI-181].
         Thread.sleep(100);
@@ -152,7 +151,7 @@ public class FileSinkTest {
         // CHECKSTYLE.OFF: IllegalInstantiation - No Guava
         final Map<String, List<Quantity>> map = new HashMap<>();
         // CHECKSTYLE.ON: IllegalInstantiation
-        List<Quantity> samples = new ArrayList<>();
+        List<Quantity> samples = null;
         for (final Object argument : arguments) {
             if (argument instanceof String) {
                 samples = new ArrayList<>();
@@ -169,10 +168,11 @@ public class FileSinkTest {
 
     private void recordEmpty(final Sink sink) {
         sink.record(new TsdEvent(
-                Collections.<String, String>emptyMap(),
-                Collections.<String, List<Quantity>>emptyMap(),
-                Collections.<String, List<Quantity>>emptyMap(),
-                Collections.<String, List<Quantity>>emptyMap()));
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap()));
     }
 
     private org.slf4j.Logger createSlf4jLoggerMock() {
@@ -228,236 +228,42 @@ public class FileSinkTest {
     private static final Map<String, List<Quantity>> TEST_SERIALIZATION_TIMERS = createQuantityMap(
             "timerA",
             "timerB",
-            TsdQuantity.newInstance(1L, null),
-            "timerC",
-            TsdQuantity.newInstance(2L, Units.MILLISECOND),
-            "timerD",
-            TsdQuantity.newInstance(3L, Units.SECOND),
-            TsdQuantity.newInstance(4L, Units.SECOND),
-            "timerE",
-            TsdQuantity.newInstance(5L, Units.DAY),
-            TsdQuantity.newInstance(6L, Units.SECOND),
-            "timerF",
-            TsdQuantity.newInstance(7L, Units.DAY),
-            TsdQuantity.newInstance(8L, null),
+            TsdQuantity.newInstance(1L),
             "timerG",
-            TsdQuantity.newInstance(9L, null),
-            TsdQuantity.newInstance(10L, null),
-            "timerH",
-            TsdQuantity.newInstance(11L, Units.DAY),
-            TsdQuantity.newInstance(12L, Units.BYTE),
+            TsdQuantity.newInstance(9L),
+            TsdQuantity.newInstance(10L),
             "timerI",
-            TsdQuantity.newInstance(1.12, null),
-            "timerJ",
-            TsdQuantity.newInstance(2.12, Units.MILLISECOND),
-            "timerK",
-            TsdQuantity.newInstance(3.12, Units.SECOND),
-            TsdQuantity.newInstance(4.12, Units.SECOND),
-            "timerL",
-            TsdQuantity.newInstance(5.12, Units.DAY),
-            TsdQuantity.newInstance(6.12, Units.SECOND),
-            "timerM",
-            TsdQuantity.newInstance(7.12, Units.DAY),
-            TsdQuantity.newInstance(8.12, null),
+            TsdQuantity.newInstance(1.12),
             "timerN",
-            TsdQuantity.newInstance(9.12, null),
-            TsdQuantity.newInstance(10.12, null),
-            "timerO",
-            TsdQuantity.newInstance(11.12, Units.DAY),
-            TsdQuantity.newInstance(12.12, Units.BYTE),
-            "timerP1",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.KILOBYTE)
-                            .addDenominatorUnit(Units.MILLISECOND)
-                            .build()),
-            "timerP2",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addDenominatorUnit(Units.MILLISECOND)
-                            .build()),
-            "timerP3",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.KILOBYTE)
-                            .build()),
-            "timerP4",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdUnit.Builder()
-                            .setScale(BaseScale.KILO)
-                            .build()),
-            "timerP5",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.BYTE)
-                            .addNumeratorUnit(Units.SECOND)
-                            .build()),
-            "timerP6",
-            TsdQuantity.newInstance(
-                    3,
-                    new ComplexCompoundUnit(
-                            "CustomByteOverByte",
-                            Arrays.asList(Units.BYTE),
-                            Arrays.asList(Units.BYTE))));
+            TsdQuantity.newInstance(9.12),
+            TsdQuantity.newInstance(10.12));
 
     private static final Map<String, List<Quantity>> TEST_SERIALIZATION_COUNTERS = createQuantityMap(
             "counterA",
             "counterB",
-            TsdQuantity.newInstance(11L, null),
-            "counterC",
-            TsdQuantity.newInstance(12L, Units.MILLISECOND),
-            "counterD",
-            TsdQuantity.newInstance(13L, Units.SECOND),
-            TsdQuantity.newInstance(14L, Units.SECOND),
-            "counterE",
-            TsdQuantity.newInstance(15L, Units.DAY),
-            TsdQuantity.newInstance(16L, Units.SECOND),
-            "counterF",
-            TsdQuantity.newInstance(17L, Units.DAY),
-            TsdQuantity.newInstance(18L, null),
+            TsdQuantity.newInstance(11L),
             "counterG",
-            TsdQuantity.newInstance(19L, null),
-            TsdQuantity.newInstance(110L, null),
-            "counterH",
-            TsdQuantity.newInstance(111L, Units.DAY),
-            TsdQuantity.newInstance(112L, Units.BYTE),
+            TsdQuantity.newInstance(19L),
+            TsdQuantity.newInstance(110L),
             "counterI",
-            TsdQuantity.newInstance(11.12, null),
-            "counterJ",
-            TsdQuantity.newInstance(12.12, Units.MILLISECOND),
-            "counterK",
-            TsdQuantity.newInstance(13.12, Units.SECOND),
-            TsdQuantity.newInstance(14.12, Units.SECOND),
-            "counterL",
-            TsdQuantity.newInstance(15.12, Units.DAY),
-            TsdQuantity.newInstance(16.12, Units.SECOND),
-            "counterM",
-            TsdQuantity.newInstance(17.12, Units.DAY),
-            TsdQuantity.newInstance(18.12, null),
+            TsdQuantity.newInstance(11.12),
             "counterN",
-            TsdQuantity.newInstance(19.12, null),
-            TsdQuantity.newInstance(110.12, null),
-            "counterO",
-            TsdQuantity.newInstance(111.12, Units.DAY),
-            TsdQuantity.newInstance(112.12, Units.BYTE),
-            "counterP1",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.KILOBYTE)
-                            .addDenominatorUnit(Units.MILLISECOND)
-                            .build()),
-            "counterP2",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addDenominatorUnit(Units.MILLISECOND)
-                            .build()),
-            "counterP3",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.KILOBYTE)
-                            .build()),
-            "counterP4",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdUnit.Builder()
-                            .setScale(BaseScale.KILO)
-                            .build()),
-            "counterP5",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.BYTE)
-                            .addNumeratorUnit(Units.SECOND)
-                            .build()));
+            TsdQuantity.newInstance(19.12),
+            TsdQuantity.newInstance(110.12));
 
 
     private static final Map<String, List<Quantity>> TEST_SERIALIZATION_GAUGES = createQuantityMap(
             "gaugeA",
             "gaugeB",
-            TsdQuantity.newInstance(21L, null),
-            "gaugeC",
-            TsdQuantity.newInstance(22L, Units.MILLISECOND),
-            "gaugeD",
-            TsdQuantity.newInstance(23L, Units.SECOND),
-            TsdQuantity.newInstance(24L, Units.SECOND),
-            "gaugeE",
-            TsdQuantity.newInstance(25L, Units.DAY),
-            TsdQuantity.newInstance(26L, Units.SECOND),
-            "gaugeF",
-            TsdQuantity.newInstance(27L, Units.DAY),
-            TsdQuantity.newInstance(28L, null),
+            TsdQuantity.newInstance(21L),
             "gaugeG",
-            TsdQuantity.newInstance(29L, null),
-            TsdQuantity.newInstance(210L, null),
-            "gaugeH",
-            TsdQuantity.newInstance(211L, Units.DAY),
-            TsdQuantity.newInstance(212L, Units.BYTE),
+            TsdQuantity.newInstance(29L),
+            TsdQuantity.newInstance(210L),
             "gaugeI",
-            TsdQuantity.newInstance(21.12, null),
-            "gaugeJ",
-            TsdQuantity.newInstance(22.12, Units.MILLISECOND),
-            "gaugeK",
-            TsdQuantity.newInstance(23.12, Units.SECOND),
-            TsdQuantity.newInstance(24.12, Units.SECOND),
-            "gaugeL",
-            TsdQuantity.newInstance(25.12, Units.DAY),
-            TsdQuantity.newInstance(26.12, Units.SECOND),
-            "gaugeM",
-            TsdQuantity.newInstance(27.12, Units.DAY),
-            TsdQuantity.newInstance(28.12, null),
+            TsdQuantity.newInstance(21.12),
             "gaugeN",
-            TsdQuantity.newInstance(29.12, null),
-            TsdQuantity.newInstance(210.12, null),
-            "gaugeO",
-            TsdQuantity.newInstance(211.12, Units.DAY),
-            TsdQuantity.newInstance(212.12, Units.BYTE),
-            "gaugeP1",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.KILOBYTE)
-                            .addDenominatorUnit(Units.MILLISECOND)
-                            .build()),
-            "gaugeP2",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addDenominatorUnit(Units.MILLISECOND)
-                            .build()),
-            "gaugeP3",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.KILOBYTE)
-                            .build()),
-            "gaugeP4",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdUnit.Builder()
-                            .setScale(BaseScale.KILO)
-                            .build()),
-            "gaugeP5",
-            TsdQuantity.newInstance(
-                    3,
-                    new TsdCompoundUnit.Builder()
-                            .addNumeratorUnit(Units.BYTE)
-                            .addNumeratorUnit(Units.SECOND)
-                            .build()),
-            "gaugeP6",
-            TsdQuantity.newInstance(
-                    3,
-                    new ComplexCompoundUnit(
-                            "CustomByteOverByte",
-                            Arrays.asList(Units.BYTE),
-                            Arrays.asList(Units.BYTE))));
+            TsdQuantity.newInstance(29.12),
+            TsdQuantity.newInstance(210.12));
 
     // CHECKSTYLE.OFF: LineLengthCheck - One value per line.
     private static final String EXPECTED_METRICS_JSON = "{"
@@ -474,70 +280,23 @@ public class FileSinkTest {
             + "  \"counters\":{"
             + "    \"counterA\":{\"values\":[]},"
             + "    \"counterB\":{\"values\":[{\"value\":11}]},"
-            + "    \"counterC\":{\"values\":[{\"value\":12,\"unitNumerators\":[\"millisecond\"]}]},"
-            + "    \"counterD\":{\"values\":[{\"value\":13,\"unitNumerators\":[\"second\"]},{\"value\":14,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"counterE\":{\"values\":[{\"value\":15,\"unitNumerators\":[\"day\"]},{\"value\":16,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"counterF\":{\"values\":[{\"value\":17,\"unitNumerators\":[\"day\"]},{\"value\":18}]},"
             + "    \"counterG\":{\"values\":[{\"value\":19},{\"value\":110}]},"
-            + "    \"counterH\":{\"values\":[{\"value\":111,\"unitNumerators\":[\"day\"]},{\"value\":112,\"unitNumerators\":[\"byte\"]}]},"
             + "    \"counterI\":{\"values\":[{\"value\":11.12}]},"
-            + "    \"counterJ\":{\"values\":[{\"value\":12.12,\"unitNumerators\":[\"millisecond\"]}]},"
-            + "    \"counterK\":{\"values\":[{\"value\":13.12,\"unitNumerators\":[\"second\"]},{\"value\":14.12,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"counterL\":{\"values\":[{\"value\":15.12,\"unitNumerators\":[\"day\"]},{\"value\":16.12,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"counterM\":{\"values\":[{\"value\":17.12,\"unitNumerators\":[\"day\"]},{\"value\":18.12}]},"
-            + "    \"counterN\":{\"values\":[{\"value\":19.12},{\"value\":110.12}]},"
-            + "    \"counterO\":{\"values\":[{\"value\":111.12,\"unitNumerators\":[\"day\"]},{\"value\":112.12,\"unitNumerators\":[\"byte\"]}]},"
-            + "    \"counterP1\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"kilobyte\"],\"unitDenominators\":[\"millisecond\"]}]},"
-            + "    \"counterP2\":{\"values\":[{\"value\":3,\"unitDenominators\":[\"millisecond\"]}]},"
-            + "    \"counterP3\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"kilobyte\"]}]},"
-            + "    \"counterP4\":{\"values\":[{\"value\":3}]},"
-            + "    \"counterP5\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"byte\",\"second\"]}]}"
+            + "    \"counterN\":{\"values\":[{\"value\":19.12},{\"value\":110.12}]}"
             + "  },"
             + "    \"gauges\":{"
             + "    \"gaugeA\":{\"values\":[]},"
             + "    \"gaugeB\":{\"values\":[{\"value\":21}]},"
-            + "    \"gaugeC\":{\"values\":[{\"value\":22,\"unitNumerators\":[\"millisecond\"]}]},"
-            + "    \"gaugeD\":{\"values\":[{\"value\":23,\"unitNumerators\":[\"second\"]},{\"value\":24,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"gaugeE\":{\"values\":[{\"value\":25,\"unitNumerators\":[\"day\"]},{\"value\":26,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"gaugeF\":{\"values\":[{\"value\":27,\"unitNumerators\":[\"day\"]},{\"value\":28}]},"
             + "    \"gaugeG\":{\"values\":[{\"value\":29},{\"value\":210}]},"
-            + "    \"gaugeH\":{\"values\":[{\"value\":211,\"unitNumerators\":[\"day\"]},{\"value\":212,\"unitNumerators\":[\"byte\"]}]},"
             + "    \"gaugeI\":{\"values\":[{\"value\":21.12}]},"
-            + "    \"gaugeJ\":{\"values\":[{\"value\":22.12,\"unitNumerators\":[\"millisecond\"]}]},"
-            + "    \"gaugeK\":{\"values\":[{\"value\":23.12,\"unitNumerators\":[\"second\"]},{\"value\":24.12,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"gaugeL\":{\"values\":[{\"value\":25.12,\"unitNumerators\":[\"day\"]},{\"value\":26.12,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"gaugeM\":{\"values\":[{\"value\":27.12,\"unitNumerators\":[\"day\"]},{\"value\":28.12}]},"
-            + "    \"gaugeN\":{\"values\":[{\"value\":29.12},{\"value\":210.12}]},"
-            + "    \"gaugeO\":{\"values\":[{\"value\":211.12,\"unitNumerators\":[\"day\"]},{\"value\":212.12,\"unitNumerators\":[\"byte\"]}]},"
-            + "    \"gaugeP1\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"kilobyte\"],\"unitDenominators\":[\"millisecond\"]}]},"
-            + "    \"gaugeP2\":{\"values\":[{\"value\":3,\"unitDenominators\":[\"millisecond\"]}]},"
-            + "    \"gaugeP3\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"kilobyte\"]}]},"
-            + "    \"gaugeP4\":{\"values\":[{\"value\":3}]},"
-            + "    \"gaugeP5\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"byte\",\"second\"]}]},"
-            + "    \"gaugeP6\":{\"values\":[{\"value\":3}]}"
+            + "    \"gaugeN\":{\"values\":[{\"value\":29.12},{\"value\":210.12}]}"
             + "  },"
             + "  \"timers\":{"
             + "    \"timerA\":{\"values\":[]},"
             + "    \"timerB\":{\"values\":[{\"value\":1}]},"
-            + "    \"timerC\":{\"values\":[{\"value\":2,\"unitNumerators\":[\"millisecond\"]}]},"
-            + "    \"timerD\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"second\"]},{\"value\":4,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"timerE\":{\"values\":[{\"value\":5,\"unitNumerators\":[\"day\"]},{\"value\":6,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"timerF\":{\"values\":[{\"value\":7,\"unitNumerators\":[\"day\"]},{\"value\":8}]},"
             + "    \"timerG\":{\"values\":[{\"value\":9},{\"value\":10}]},"
-            + "    \"timerH\":{\"values\":[{\"value\":11,\"unitNumerators\":[\"day\"]},{\"value\":12,\"unitNumerators\":[\"byte\"]}]},"
             + "    \"timerI\":{\"values\":[{\"value\":1.12}]},"
-            + "    \"timerJ\":{\"values\":[{\"value\":2.12,\"unitNumerators\":[\"millisecond\"]}]},"
-            + "    \"timerK\":{\"values\":[{\"value\":3.12,\"unitNumerators\":[\"second\"]},{\"value\":4.12,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"timerL\":{\"values\":[{\"value\":5.12,\"unitNumerators\":[\"day\"]},{\"value\":6.12,\"unitNumerators\":[\"second\"]}]},"
-            + "    \"timerM\":{\"values\":[{\"value\":7.12,\"unitNumerators\":[\"day\"]},{\"value\":8.12}]},"
-            + "    \"timerN\":{\"values\":[{\"value\":9.12},{\"value\":10.12}]},"
-            + "    \"timerO\":{\"values\":[{\"value\":11.12,\"unitNumerators\":[\"day\"]},{\"value\":12.12,\"unitNumerators\":[\"byte\"]}]},"
-            + "    \"timerP1\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"kilobyte\"],\"unitDenominators\":[\"millisecond\"]}]},"
-            + "    \"timerP2\":{\"values\":[{\"value\":3,\"unitDenominators\":[\"millisecond\"]}]},"
-            + "    \"timerP3\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"kilobyte\"]}]},"
-            + "    \"timerP4\":{\"values\":[{\"value\":3}]},"
-            + "    \"timerP5\":{\"values\":[{\"value\":3,\"unitNumerators\":[\"byte\",\"second\"]}]},"
-            + "    \"timerP6\":{\"values\":[{\"value\":3}]}"
+            + "    \"timerN\":{\"values\":[{\"value\":9.12},{\"value\":10.12}]}"
             + "  }"
             + "}";
     // CHECKSTYLE.ON: LineLengthCheck
