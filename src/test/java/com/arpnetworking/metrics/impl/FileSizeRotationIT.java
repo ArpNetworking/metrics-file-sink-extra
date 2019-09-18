@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Inscope Metrics Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ import java.util.Collections;
 /**
  * Integration test of file size based rotation.
  *
- * @author Ville Koskela (ville dot koskela at inscopemetrics dot com)
+ * @author Ville Koskela (ville dot koskela at inscopemetrics dot io)
  */
 public class FileSizeRotationIT {
 
@@ -128,5 +128,5 @@ public class FileSizeRotationIT {
 
     // NOTE: This must allow the mask to be decreased which happens after eight
     // times the default increase time of 100 ms; so 850 ms.
-    private static final long SLEEP_IN_MILLIS = 850;
+    private static final long SLEEP_IN_MILLIS = 1000;
 }

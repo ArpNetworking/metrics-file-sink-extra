@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Groupon.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,8 @@ package com.arpnetworking.metrics.impl;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.encoder.Encoder;
-import com.arpnetworking.metrics.CompoundUnit;
 import com.arpnetworking.metrics.Event;
 import com.arpnetworking.metrics.Quantity;
-import com.arpnetworking.metrics.Unit;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -32,15 +30,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
 
 /**
- * Implementation of <code>Sink</code> for the query log file.
+ * Implementation of {@link com.arpnetworking.metrics.Sink} for the query log file.
  *
- * @author Ville Koskela (ville dot koskela at inscopemetrics dot com)
+ * @author Ville Koskela (ville dot koskela at inscopemetrics dot io)
  */
 public class FileSink extends BaseFileSink {
 
@@ -62,7 +57,7 @@ public class FileSink extends BaseFileSink {
     /**
      * Protected constructor.
      *
-     * @param builder Instance of <code>Builder</code>.
+     * @param builder Instance of {@link Builder}.
      */
     protected FileSink(final Builder builder) {
         this(builder, OBJECT_MAPPER, LOGGER);
@@ -147,52 +142,22 @@ public class FileSink extends BaseFileSink {
 
         @Override
         public void serialize(
-                final Quantity valueWithUnit,
+                final Quantity value,
                 final JsonGenerator jsonGenerator,
                 final SerializerProvider provider)
                 throws IOException {
             jsonGenerator.writeStartObject();
-            jsonGenerator.writeObjectField("value", valueWithUnit.getValue());
-            @Nullable final Unit unit = valueWithUnit.getUnit();
-            if (unit != null) {
-                final Unit simplifiedUnit = new TsdCompoundUnit.Builder()
-                        .addNumeratorUnit(unit)
-                        .build();
-
-                if (simplifiedUnit instanceof CompoundUnit) {
-                    final CompoundUnit compoundUnit = (CompoundUnit) simplifiedUnit;
-                    if (!compoundUnit.getNumeratorUnits().isEmpty()) {
-                        writeUnits(jsonGenerator, compoundUnit.getNumeratorUnits(), "unitNumerators");
-                    }
-                    if (!compoundUnit.getDenominatorUnits().isEmpty()) {
-                        writeUnits(jsonGenerator, compoundUnit.getDenominatorUnits(), "unitDenominators");
-                    }
-                } else if (simplifiedUnit != null) {
-                    writeUnits(jsonGenerator, Collections.singletonList(simplifiedUnit), "unitNumerators");
-                }
-
-            }
+            jsonGenerator.writeObjectField("value", value.getValue());
             jsonGenerator.writeEndObject();
-        }
-
-        private void writeUnits(
-                final JsonGenerator jsonGenerator,
-                final List<Unit> units,
-                final String name) throws IOException {
-            jsonGenerator.writeArrayFieldStart(name);
-            for (final Unit unit : units) {
-                jsonGenerator.writeString(unit.getName());
-            }
-            jsonGenerator.writeEndArray();
         }
     }
 
     /**
-     * Builder for <code>FileSink</code>.
+     * Builder for {@link FileSink}.
      *
      * This class is thread safe.
      *
-     * @author Ville Koskela (ville dot koskela at inscopemetrics dot com)
+     * @author Ville Koskela (ville dot koskela at inscopemetrics dot io)
      */
     public static class Builder extends BaseFileSink.Builder<FileSink, Builder> {
 
