@@ -29,7 +29,7 @@
   <name>File Sink Extra</name>
   <description>File sink for metrics client.</description>
   <url>https://github.com/ArpNetworking/metrics-file-sink-extra</url>
-  <version>0.11.1-SNAPSHOT</version>
+  <version>0.11.1</version>
 
   <licenses>
     <license>
@@ -63,7 +63,7 @@
     <connection>scm:git:git@github.com:arpnetworking/metrics-file-sink-extra.git</connection>
     <developerConnection>scm:git:git@github.com:arpnetworking/metrics-file-sink-extra.git</developerConnection>
     <url>https://github.com/arpnetworking/metrics-file-sink-extra</url>
-    <tag>HEAD</tag>
+    <tag>file-sink-extra-0.11.1</tag>
   </scm>
 
   <properties>
@@ -97,6 +97,7 @@
     <metrics.client.version>0.11.0</metrics.client.version>
     <mockito.version>2.23.4</mockito.version>
     <slf4j.version>1.7.25</slf4j.version>
+    <spotbugs.annotations.version>3.1.12</spotbugs.annotations.version>
 
     <!--Plugin versions-->
     <maven.shade.plugin.version>2.4.3</maven.shade.plugin.version>
@@ -265,6 +266,13 @@
           <artifactId>findbugs-annotations</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <!-- TODO(ville): Remove spotbugs dependency once findbugs to spotbugs migration is complete -->
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <version>${spotbugs.annotations.version}</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
