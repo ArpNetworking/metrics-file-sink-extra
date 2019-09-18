@@ -29,7 +29,7 @@
   <name>File Sink Extra</name>
   <description>File sink for metrics client.</description>
   <url>https://github.com/ArpNetworking/metrics-file-sink-extra</url>
-  <version>0.11.1</version>
+  <version>0.11.2-SNAPSHOT</version>
 
   <licenses>
     <license>
