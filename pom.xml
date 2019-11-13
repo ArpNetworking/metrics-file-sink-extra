@@ -86,7 +86,7 @@
     -->
 
     <!--Dependency versions-->
-    <jackson.version>2.9.8</jackson.version>
+    <jackson.version>2.10.1</jackson.version>
     <json-jackson-coreutils.version>1.9</json-jackson-coreutils.version>
     <json-schema-core.version>1.2.11</json-schema-core.version>
     <json-schema-validator.version>2.2.11</json-schema-validator.version>
