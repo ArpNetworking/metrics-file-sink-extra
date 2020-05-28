@@ -18,7 +18,7 @@
   <parent>
     <groupId>com.arpnetworking.build</groupId>
     <artifactId>arpnetworking-parent-pom</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.5</version>
     <relativePath />
   </parent>
 
@@ -91,13 +91,13 @@
     <json-schema-core.version>1.2.11</json-schema-core.version>
     <json-schema-validator.version>2.2.11</json-schema-validator.version>
     <jsr305.version>3.0.2</jsr305.version>
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13</junit.version>
     <logback.steno.version>1.18.2</logback.steno.version>
     <logback.version>1.2.3</logback.version>
-    <metrics.client.version>0.11.0</metrics.client.version>
+    <metrics.client.version>0.11.2</metrics.client.version>
     <mockito.version>2.23.4</mockito.version>
-    <slf4j.version>1.7.25</slf4j.version>
-    <spotbugs.annotations.version>3.1.12</spotbugs.annotations.version>
+    <slf4j.version>1.7.30</slf4j.version>
+    <spotbugs.annotations.version>4.0.3</spotbugs.annotations.version>
 
     <!--Plugin versions-->
     <maven.shade.plugin.version>2.4.3</maven.shade.plugin.version>
