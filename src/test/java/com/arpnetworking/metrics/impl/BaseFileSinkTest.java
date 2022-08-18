@@ -25,6 +25,8 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import com.arpnetworking.logback.SizeAndRandomizedTimeBasedFNATP;
 import com.arpnetworking.metrics.Event;
 import com.arpnetworking.metrics.Sink;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -170,7 +172,7 @@ public class BaseFileSinkTest {
                 .build();
 
         Assert.assertNotNull(sink);
-        Assert.assertTrue(sink instanceof WarningSink);
+        MatcherAssert.assertThat(sink, Matchers.instanceOf(WarningSink.class));
     }
 
     @Test
@@ -184,7 +186,7 @@ public class BaseFileSinkTest {
                 .build();
 
         Assert.assertNotNull(sink);
-        Assert.assertTrue(sink instanceof WarningSink);
+        MatcherAssert.assertThat(sink, Matchers.instanceOf(WarningSink.class));
     }
 
     @Test
@@ -195,7 +197,7 @@ public class BaseFileSinkTest {
                 .build();
 
         Assert.assertNotNull(sink);
-        Assert.assertTrue(sink instanceof WarningSink);
+        MatcherAssert.assertThat(sink, Matchers.instanceOf(WarningSink.class));
     }
 
     @Test
