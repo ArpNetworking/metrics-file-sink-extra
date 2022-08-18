@@ -18,7 +18,7 @@
   <parent>
     <groupId>com.arpnetworking.build</groupId>
     <artifactId>arpnetworking-parent-pom</artifactId>
-    <version>2.0.5</version>
+    <version>3.0.10</version>
     <relativePath />
   </parent>
 
@@ -86,21 +86,21 @@
     -->
 
     <!--Dependency versions-->
-    <jackson.version>2.9.8</jackson.version>
-    <json-jackson-coreutils.version>1.9</json-jackson-coreutils.version>
-    <json-schema-core.version>1.2.11</json-schema-core.version>
-    <json-schema-validator.version>2.2.11</json-schema-validator.version>
+    <hamcrest.version>2.2</hamcrest.version>
+    <jackson.version>2.13.3</jackson.version>
+    <json-jackson-coreutils.version>2.0</json-jackson-coreutils.version>
+    <json-schema-validator.version>1.0.72</json-schema-validator.version>
     <jsr305.version>3.0.2</jsr305.version>
-    <junit.version>4.13</junit.version>
-    <logback.steno.version>1.18.2</logback.steno.version>
-    <logback.version>1.2.3</logback.version>
-    <metrics.client.version>0.11.2</metrics.client.version>
-    <mockito.version>2.23.4</mockito.version>
-    <slf4j.version>1.7.30</slf4j.version>
-    <spotbugs.annotations.version>4.0.3</spotbugs.annotations.version>
+    <junit.version>4.13.2</junit.version>
+    <logback.steno.version>1.19.0</logback.steno.version>
+    <logback.version>1.2.11</logback.version>
+    <metrics.client.version>0.12.0</metrics.client.version>
+    <mockito.version>4.7.0</mockito.version>
+    <slf4j.version>1.7.36</slf4j.version>
+    <spotbugs.annotations.version>4.7.1</spotbugs.annotations.version>
 
     <!--Plugin versions-->
-    <maven.shade.plugin.version>2.4.3</maven.shade.plugin.version>
+    <maven.shade.plugin.version>3.3.0</maven.shade.plugin.version>
 
     <!-- Code Coverage -->
     <jacoco.check.line.coverage>1.0</jacoco.check.line.coverage>
@@ -161,7 +161,6 @@
               <include>com.fasterxml.jackson.core:jackson-databind</include>
               <include>com.fasterxml.jackson.core:jackson-annotations</include>
               <include>com.fasterxml.jackson.module:jackson-module-afterburner</include>
-              <include>joda-time:joda-time</include>
             </includes>
           </artifactSet>
           <filters>
@@ -182,12 +181,6 @@
             </filter>
             <filter>
               <artifact>com.arpnetworking.logback:logback-steno</artifact>
-              <excludes>
-                <exclude>META-INF/**</exclude>
-              </excludes>
-            </filter>
-            <filter>
-              <artifact>joda-time:joda-time</artifact>
               <excludes>
                 <exclude>META-INF/**</exclude>
               </excludes>
@@ -237,10 +230,6 @@
             <relocation>
               <pattern>com.fasterxml.jackson</pattern>
               <shadedPattern>com.arpnetworking.metrics.filesinkextra.shaded.com.fasterxml.jackson</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>org.joda.time</pattern>
-              <shadedPattern>com.arpnetworking.metrics.filesinkextra.shaded.org.joda.time</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
@@ -325,6 +314,21 @@
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
+      <exclusions>
+        <!-- TODO(ville): Remove once JUnit depends on modern hamcrest; see:
+            http://hamcrest.org/JavaHamcrest/distributables
+        -->
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <version>${hamcrest.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -333,34 +337,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.java-json-tools</groupId>
+      <groupId>com.networknt</groupId>
       <artifactId>json-schema-validator</artifactId>
       <version>${json-schema-validator.version}</version>
       <scope>test</scope>
-      <!-- TODO(ville): Pending external upgrade:
-          https://github.com/java-json-tools/json-schema-validator/pull/284
-       -->
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.code.findbugs</groupId>
-          <artifactId>jsr305</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.github.java-json-tools</groupId>
-      <artifactId>json-schema-core</artifactId>
-      <version>${json-schema-core.version}</version>
-      <scope>test</scope>
-      <exclusions>
-        <!-- TODO(ville): Pending external upgrade:
-            https://github.com/java-json-tools/json-schema-core/pull/50
-        -->
-        <exclusion>
-          <groupId>com.google.code.findbugs</groupId>
-          <artifactId>jsr305</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.github.java-json-tools</groupId>

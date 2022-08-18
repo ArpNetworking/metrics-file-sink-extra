@@ -23,10 +23,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jackson.JacksonUtils;
 import com.github.fge.jackson.JsonLoader;
-import com.github.fge.jsonschema.core.exceptions.ProcessingException;
-import com.github.fge.jsonschema.core.report.ProcessingReport;
-import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import com.github.fge.jsonschema.main.JsonValidator;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -44,6 +44,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -182,9 +183,9 @@ public class FileSinkTest {
     private void assertMatchesJsonSchema(final String json) {
         try {
             final JsonNode jsonNode = JsonLoader.fromString(json);
-            final ProcessingReport report = VALIDATOR.validate(STENO_SCHEMA, jsonNode);
-            Assert.assertTrue(report.toString(), report.isSuccess());
-        } catch (final IOException | ProcessingException e) {
+            final Set<ValidationMessage> report = STENO_SCHEMA.validate(jsonNode);
+            Assert.assertEquals(report.size(), 0);
+        } catch (final IOException e) {
             Assert.fail("Failed with exception: " + e);
         }
     }
@@ -205,8 +206,7 @@ public class FileSinkTest {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private static final JsonValidator VALIDATOR = JsonSchemaFactory.byDefault().getValidator();
-    private static final JsonNode STENO_SCHEMA;
+    private static final JsonSchema STENO_SCHEMA;
 
     private static final Map<String, String> ANNOTATIONS = new LinkedHashMap<>();
     private static final Map<String, List<Quantity>> TEST_EMPTY_SERIALIZATION_TIMERS = createQuantityMap();
@@ -322,7 +322,7 @@ public class FileSinkTest {
                 throw new RuntimeException(e2);
             }
         }
-        STENO_SCHEMA = jsonNode;
+        STENO_SCHEMA = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4).getSchema(jsonNode);
 
         ANNOTATIONS.put("_start", "1997-07-16T19:20:30Z");
         ANNOTATIONS.put("_end", "1997-07-16T19:20:31Z");
