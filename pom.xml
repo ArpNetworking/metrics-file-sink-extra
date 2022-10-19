@@ -87,7 +87,7 @@
 
     <!--Dependency versions-->
     <hamcrest.version>2.2</hamcrest.version>
-    <jackson.version>2.13.3</jackson.version>
+    <jackson.version>2.13.4</jackson.version>
     <json-jackson-coreutils.version>2.0</json-jackson-coreutils.version>
     <json-schema-validator.version>1.0.72</json-schema-validator.version>
     <jsr305.version>3.0.2</jsr305.version>
