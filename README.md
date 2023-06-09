@@ -1,5 +1,7 @@
 Metrics Client File Sink
 ========================
+## This project is outdated and no longer of use. We encourage the sending of metrics over HTTP
+
 
 <a href="https://raw.githubusercontent.com/ArpNetworking/metrics-file-sink-extra/master/LICENSE">
     <img src="https://img.shields.io/hexpm/l/plug.svg"
